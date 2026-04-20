@@ -2,36 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    box-sizing: border-box;
-  }
 
-  html {
-    scroll-behavior: smooth;
-  }
+:root {
+  --color-surface:        #0f1117;
+  --color-surface-card:   #161b2e;
+  --color-surface-border: #2d3352;
+  --color-surface-hover:  #1e2540;
+  --color-text-primary:   #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted:     #64748b;
+  --bg-gradient: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.12), transparent);
+}
+
+
+:root.light {
+  --color-surface:        #f1f5f9;
+  --color-surface-card:   #ffffff;
+  --color-surface-border: #e2e8f0;
+  --color-surface-hover:  #f8fafc;
+  --color-text-primary:   #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted:     #94a3b8;
+  --bg-gradient: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.06), transparent);
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
 
   body {
-    @apply bg-surface text-slate-200 font-sans antialiased;
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.12), transparent);
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    background-image: var(--bg-gradient);
     min-height: 100vh;
+    @apply font-sans antialiased transition-colors duration-300;
   }
 
   /* Scrollbar */
   ::-webkit-scrollbar        { width: 6px; }
-  ::-webkit-scrollbar-track  { background: #0f1117; }
-  ::-webkit-scrollbar-thumb  { background: #2d3352; border-radius: 4px; }
+  ::-webkit-scrollbar-track  { background: var(--color-surface); }
+  ::-webkit-scrollbar-thumb  { background: var(--color-surface-border); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
 }
 
 @layer components {
-  /* Card */
   .card {
-    @apply bg-surface-card border border-surface-border rounded-2xl p-6;
+    background-color: var(--color-surface-card);
+    border-color: var(--color-surface-border);
+    @apply border rounded-2xl p-6 transition-colors duration-300;
   }
 
-  /* Primary button */
+
   .btn-primary {
     @apply bg-brand-600 hover:bg-brand-700 text-white font-medium
            px-5 py-2.5 rounded-xl transition-all duration-200
@@ -39,29 +61,55 @@
            flex items-center justify-center gap-2;
   }
 
-  /* Ghost button */
+
   .btn-ghost {
-    @apply border border-surface-border hover:border-brand-500
-           text-slate-300 hover:text-white font-medium
+    border-color: var(--color-surface-border);
+    color: var(--color-text-secondary);
+    @apply border hover:border-brand-500 hover:text-white font-medium
            px-5 py-2.5 rounded-xl transition-all duration-200
            flex items-center justify-center gap-2;
   }
 
-  /* Input field */
+  /* ---- Input Field ---- */
   .input-field {
-    @apply w-full bg-surface border border-surface-border rounded-xl
-           px-4 py-3 text-slate-200 placeholder-slate-500
+    background-color: var(--color-surface);
+    border-color: var(--color-surface-border);
+    color: var(--color-text-primary);
+    @apply w-full border rounded-xl px-4 py-3 placeholder-slate-400
            focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
            transition-all duration-200;
   }
 
-  /* Status badge */
+  /* ---- Badges ---- */
   .badge {
     @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium;
   }
-  .badge-green  { @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20; }
-  .badge-yellow { @apply bg-amber-500/10   text-amber-400   border border-amber-500/20;  }
-  .badge-red    { @apply bg-rose-500/10    text-rose-400    border border-rose-500/20;   }
-  .badge-blue   { @apply bg-brand-500/10   text-brand-400   border border-brand-500/20; }
-  .badge-gray   { @apply bg-slate-500/10   text-slate-400   border border-slate-500/20; }
+  .badge-green  { @apply bg-emerald-500/10 text-emerald-600 border border-emerald-500/20; }
+  .badge-yellow { @apply bg-amber-500/10   text-amber-600   border border-amber-500/20;  }
+  .badge-red    { @apply bg-rose-500/10    text-rose-600    border border-rose-500/20;   }
+  .badge-blue   { @apply bg-brand-500/10   text-brand-600   border border-brand-500/20; }
+  .badge-gray   { @apply bg-slate-500/10   text-slate-500   border border-slate-500/20; }
+
+  /* Dark mode badges — brighter text */
+  :root:not(.light) .badge-green  { @apply text-emerald-400; }
+  :root:not(.light) .badge-yellow { @apply text-amber-400;   }
+  :root:not(.light) .badge-red    { @apply text-rose-400;    }
+  :root:not(.light) .badge-blue   { @apply text-brand-400;   }
+  :root:not(.light) .badge-gray   { @apply text-slate-400;   }
 }
+
+/* ---- Utility: surface colors via CSS vars ---- */
+.bg-surface        { background-color: var(--color-surface) !important; }
+.bg-surface-card   { background-color: var(--color-surface-card) !important; }
+.border-surface-border { border-color: var(--color-surface-border) !important; }
+.hover\:bg-surface-hover:hover { background-color: var(--color-surface-hover) !important; }
+.text-slate-200    { color: var(--color-text-primary) !important; }
+.text-slate-300    { color: var(--color-text-secondary) !important; }
+.text-slate-400    { color: var(--color-text-muted) !important; }
+
+/* ---- Animations ---- */
+@keyframes fadeIn   { from { opacity: 0; }             to { opacity: 1; } }
+@keyframes slideUp  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.animate-fade-in  { animation: fadeIn  0.4s ease both; }
+.animate-slide-up { animation: slideUp 0.4s ease both; }

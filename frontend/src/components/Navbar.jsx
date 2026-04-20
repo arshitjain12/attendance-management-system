@@ -4,6 +4,7 @@ import { LogOut, User, Shield, Users, BarChart2 } from 'lucide-react';
 import { logout, selectCurrentUser }   from '../store/authSlice';
 import { apiSlice }                    from '../store/apiSlice';
 import toast                           from 'react-hot-toast';
+import ThemeToggle from './ThemeToggle.jsx'; 
 
 const ROLE_COLORS = { admin: 'badge-red', manager: 'badge-blue', employee: 'badge-green' };
 const ROLE_ICONS  = { admin: Shield, manager: Users, employee: User };
@@ -36,9 +37,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           <NavLink to={homeLink} className="flex items-center gap-2.5 shrink-0">
-          
             <span className="font-display font-bold text-white text-lg tracking-tight hidden sm:block">
-             D Table Analytics
+              D Table Analytics
             </span>
           </NavLink>
 
@@ -59,6 +59,9 @@ export default function Navbar() {
                 <RoleIcon size={11} />{user?.role}
               </span>
             </div>
+
+            <ThemeToggle /> 
+
             <button onClick={handleLogout} className="btn-ghost text-sm px-3 py-2" title="Logout">
               <LogOut size={16} />
               <span className="hidden sm:inline">Logout</span>

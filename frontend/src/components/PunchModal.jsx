@@ -108,10 +108,10 @@ const handleSubmit = async () => {
     if (!captured) { toast.error('Please capture your selfie first'); return; }
     if (!location) { toast.error('Location not fetched yet'); return; }
     const distance = getDistanceInMeters(location.latitude, location.longitude, OFFICE_LAT, OFFICE_LNG); 
-   
+  //  commit out if you want close hard coded location 
     if (distance > ALLOWED_RADIUS) {
      toast.error(`You are far from office! ${Math.round(distance)}m door ho.`);
-  onClose(); // 👈 Modal turant band
+  onClose(); 
   return;                  
 }
 await onConfirm(captured, location); 
