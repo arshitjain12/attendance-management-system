@@ -71,7 +71,7 @@ export default function Signup() {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                placeholder="Arshit Jain"
+                placeholder="D Table Analytics" 
                 className="input-field"
                 required
               />
@@ -87,7 +87,7 @@ export default function Signup() {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="arshit@company.com"
+                placeholder="D Table Analytics@gmail.com"
                 className="input-field"
                 required
               />
