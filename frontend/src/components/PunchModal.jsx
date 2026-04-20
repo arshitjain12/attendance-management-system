@@ -1,7 +1,16 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Camera, MapPin, X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-
+function getDistanceInMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371e3; // Earth's radius in meters
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a = 
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; 
+}
 
 export default function PunchModal({ type, onClose, onConfirm, isLoading }) {
   const videoRef    = useRef(null);
@@ -13,7 +22,11 @@ export default function PunchModal({ type, onClose, onConfirm, isLoading }) {
   const [location,   setLocation]   = useState(null);
   const [gpsError,   setGpsError]   = useState('');
   const [gpsLoading, setGpsLoading] = useState(false);
-  const [captured,   setCaptured]   = useState(null); // base64 selfie
+  const [captured,   setCaptured]   = useState(null); 
+    //  location change
+  const OFFICE_LAT = 23.258181; 
+  const OFFICE_LNG = 77.411266; 
+  const ALLOWED_RADIUS = 100; 
 
 
   const startCamera = useCallback(async () => {
@@ -91,9 +104,18 @@ export default function PunchModal({ type, onClose, onConfirm, isLoading }) {
   };
 
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
     if (!captured) { toast.error('Please capture your selfie first'); return; }
     if (!location) { toast.error('Location not fetched yet'); return; }
+    const distance = getDistanceInMeters(location.latitude, location.longitude, OFFICE_LAT, OFFICE_LNG); 
+   
+    if (distance > ALLOWED_RADIUS) {
+     toast.error(`You are far from office! ${Math.round(distance)}m door ho.`);
+  onClose(); // 👈 Modal turant band
+  return;                  
+}
+await onConfirm(captured, location); 
+
     await onConfirm(captured, location);
   };
 
